@@ -253,7 +253,7 @@ show_help() {
 
 bsd_convert() {
   start_date=$1
-  read -r h m <<< $( echo $2 | tr ':' ' ' )
+  echo $2 | tr ':' ' ' | read -r h m
   if [ "$( echo $h | sed s/\+// )" == $h ];then
     sign="-"
     h=$( echo $h | sed s/\-// )
@@ -265,7 +265,7 @@ bsd_convert() {
 }
 
 hours_to_seconds() {
-  read -r h m <<< $( echo $1 | tr ':' ' ' )
+  echo $1 | tr ':' ' ' | read -r h m
   if [ "$( echo $h | sed s/\+// )" == $h ];then
     sign="-"
     h=$( echo $h | sed s/\-// )
