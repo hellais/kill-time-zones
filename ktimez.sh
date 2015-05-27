@@ -254,7 +254,7 @@ show_help() {
 bsd_convert() {
   start_date=$1
   echo $2 | tr ':' ' ' | read -r h m
-  if [ "$( echo $h | sed s/\+// )" == $h ];then
+  if [ "$( echo $h | sed s/\+// )" = $h ];then
     sign="-"
     h=$( echo $h | sed s/\-// )
   else
@@ -266,7 +266,7 @@ bsd_convert() {
 
 hours_to_seconds() {
   echo $1 | tr ':' ' ' | read -r h m
-  if [ "$( echo $h | sed s/\+// )" == $h ];then
+  if [ "$( echo $h | sed s/\+// )" = $h ];then
     sign="-"
     h=$( echo $h | sed s/\-// )
   else
@@ -278,7 +278,7 @@ hours_to_seconds() {
 
 seconds_to_hours() {
   s=$1
-  if [ "$( echo $s | sed s/\+// )" == "$s" ];then
+  if [ "$( echo $s | sed s/\+// )" = "$s" ];then
     sign="-"
     s=$( echo $s | sed s/\-// )
   else
@@ -288,15 +288,15 @@ seconds_to_hours() {
 
   h=$(( $s/(60*60) ))
   m=$(( ($s-($h*60*60))/60 ))
-  [ "$m" == "0" ] && m="00"
+  [ "$m" = "0" ] && m="00"
   echo "$sign$h:$m"
 }
 
 get_offset() {
   start_offset=$( echo "$TIMEZONES" | grep -e "^$start_timezone" | cut -d '|' -f2 )
   end_offset=$( echo "$TIMEZONES" | grep -e "^$end_timezone" | cut -d '|' -f2 )
-  [ "$start_offset" == "UTC" ] && start_offset="+00:00"
-  [ "$end_offset" == "UTC" ] && end_offset="+00:00"
+  [ "$start_offset" = "UTC" ] && start_offset="+00:00"
+  [ "$end_offset" = "UTC" ] && end_offset="+00:00"
   start_offset_seconds=$(hours_to_seconds $start_offset)
   end_offset_seconds=$(hours_to_seconds $end_offset)
   
@@ -308,7 +308,7 @@ get_offset() {
 convert() {
   start_time=$1 && shift
   start_timezone=$1 && shift
-  [ "$1" == "to" ] && shift
+  [ "$1" = "to" ] && shift
   echo "$start_time $start_timezone"
   while [ "$1" != "" ];do
     end_timezone=$1 && shift
