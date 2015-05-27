@@ -25,3 +25,23 @@ To produce the output:
 08:20 PST
 12:20 EDT
 ```
+
+## Supported platforms
+
+It should work on any system that has a `/bin/sh` compatible shell (bash, zsh,
+dash should all work fine) and either GNU date or BSD date.
+
+It is known to work on:
+
+* Mac OS X: 10.10
+
+* Debian GNU/Linux
+
+## Design goals
+
+This tool is designed to be as POSIX friendly as possible. For this reason it
+is implemented as a `/bin/sh` script (no bash, zsh, etc.) and neatly fits
+inside of just 1 file.
+
+If you have plans to extend it further please keep this in mind.
+
