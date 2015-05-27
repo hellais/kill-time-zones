@@ -309,12 +309,12 @@ convert() {
   start_time=$1 && shift
   start_timezone=$1 && shift
   [ "$1" == "to" ] && shift
-  echo "$start_timezone: $start_time"
+  echo "$start_time $start_timezone"
   while [ "$1" != "" ];do
     end_timezone=$1 && shift
     offset=$(get_offset $start_timezone $end_timezone)
     new_time=$(bsd_convert $start_time $offset)
-    echo "$end_timezone: $new_time"
+    echo "$new_time $end_timezone"
   done
 }
 
