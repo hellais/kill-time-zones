@@ -254,24 +254,24 @@ show_help() {
 bsd_convert() {
   start_date=$1
   echo $2 | tr ':' ' ' | read -r h m
-  if [ "$( echo $h | sed s/\+// )" = $h ];then
+  if [ "$( echo $h | sed s/\+// )" = "$h" ];then
     sign="-"
-    h=$( echo $h | sed s/\-// )
+    h="$( echo $h | sed s/\-// )"
   else
     sign="+"
-    h=$( echo $h | sed s/\+// )
+    h="$( echo $h | sed s/\+// )"
   fi
   date -v$sign${m}M -v$sign${h}H -jf "%H:%M" "$start_date+0000" +%H:%M 2>/dev/null 
 }
 
 hours_to_seconds() {
   echo $1 | tr ':' ' ' | read -r h m
-  if [ "$( echo $h | sed s/\+// )" = $h ];then
+  if [ "$( echo $h | sed s/\+// )" = "$h" ];then
     sign="-"
-    h=$( echo $h | sed s/\-// )
+    h="$( echo $h | sed s/\-// )"
   else
     sign="+"
-    h=$( echo $h | sed s/\+// )
+    h="$( echo $h | sed s/\+// )"
   fi
   echo "$sign$(($h*60*60+$m*60))"
 }
@@ -280,27 +280,27 @@ seconds_to_hours() {
   s=$1
   if [ "$( echo $s | sed s/\+// )" = "$s" ];then
     sign="-"
-    s=$( echo $s | sed s/\-// )
+    s="$( echo $s | sed s/\-// )"
   else
     sign="+"
-    s=$( echo $s | sed s/\+// )
+    s="$( echo $s | sed s/\+// )"
   fi
 
-  h=$(( $s/(60*60) ))
-  m=$(( ($s-($h*60*60))/60 ))
+  h="$(( $s/(60*60) ))"
+  m="$(( ($s-($h*60*60))/60 ))"
   [ "$m" = "0" ] && m="00"
   echo "$sign$h:$m"
 }
 
 get_offset() {
-  start_offset=$( echo "$TIMEZONES" | grep -e "^$start_timezone" | cut -d '|' -f2 )
-  end_offset=$( echo "$TIMEZONES" | grep -e "^$end_timezone" | cut -d '|' -f2 )
+  start_offset="$( echo "$TIMEZONES" | grep -e "^$start_timezone" | cut -d '|' -f2 )"
+  end_offset="$( echo "$TIMEZONES" | grep -e "^$end_timezone" | cut -d '|' -f2 )"
   [ "$start_offset" = "UTC" ] && start_offset="+00:00"
   [ "$end_offset" = "UTC" ] && end_offset="+00:00"
-  start_offset_seconds=$(hours_to_seconds $start_offset)
-  end_offset_seconds=$(hours_to_seconds $end_offset)
+  start_offset_seconds="$(hours_to_seconds $start_offset)"
+  end_offset_seconds="$(hours_to_seconds $end_offset)"
   
-  diff=$(($end_offset_seconds - $start_offset_seconds))
+  diff="$(($end_offset_seconds - $start_offset_seconds))"
   
   seconds_to_hours $diff
 }
@@ -312,8 +312,8 @@ convert() {
   echo "$start_time $start_timezone"
   while [ "$1" != "" ];do
     end_timezone=$1 && shift
-    offset=$(get_offset $start_timezone $end_timezone)
-    new_time=$(bsd_convert $start_time $offset)
+    offset="$(get_offset $start_timezone $end_timezone)"
+    new_time="$(bsd_convert $start_time $offset)"
     echo "$new_time $end_timezone"
   done
 }
