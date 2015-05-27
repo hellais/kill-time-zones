@@ -277,7 +277,7 @@ gnu_convert() {
     sign="-"
     h="$( echo $h | sed s/\+// )"
   fi
-  date -u --date '$start_date $sign${h}${m}' +%H:%M 2>/dev/null 
+  date -u --date "$start_date $sign${h}${m}" +%H:%M 2>/dev/null
 }
 
 hours_to_seconds() {
@@ -331,7 +331,7 @@ convert() {
   while [ "$1" != "" ];do
     end_timezone=$1 && shift
     offset="$(get_offset $start_timezone $end_timezone)"
-    if [ date --date '00:00' 2>/dev/null ];then
+    if (date --date '00:00' > /dev/null 2>&1);then
       new_time=$(gnu_convert $start_time $offset)
     else
       new_time=$(bsd_convert $start_time $offset)
