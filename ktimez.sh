@@ -265,6 +265,21 @@ bsd_convert() {
   date -v$sign${m}M -v$sign${h}H -jf "%H:%M" "$start_date+0000" +%H:%M 2>/dev/null 
 }
 
+gnu_convert() {
+  start_date=$1
+  h=$( echo $2 | cut -d ':' -f1 )
+  m=$( echo $2 | cut -d ':' -f2 )
+  # Note how the signs here are inverted to work with GNU date
+  if [ "$( echo $h | sed s/\+// )" = "$h" ];then
+    sign="+"
+    h="$( echo $h | sed s/\-// )"
+  else
+    sign="-"
+    h="$( echo $h | sed s/\+// )"
+  fi
+  date -u --date '$start_date $sign${h}${m}' +%H:%M 2>/dev/null 
+}
+
 hours_to_seconds() {
   h=$( echo $1 | cut -d ':' -f1 )
   m=$( echo $1 | cut -d ':' -f2 )
@@ -316,7 +331,11 @@ convert() {
   while [ "$1" != "" ];do
     end_timezone=$1 && shift
     offset="$(get_offset $start_timezone $end_timezone)"
-    new_time="$(bsd_convert $start_time $offset)"
+    if [ date --date '00:00' 2>/dev/null ];then
+      new_time=$(gnu_convert $start_time $offset)
+    else
+      new_time=$(bsd_convert $start_time $offset)
+    fi
     echo "$new_time $end_timezone"
   done
 }
